@@ -1,16 +1,15 @@
 from random import shuffle
 from colorsys import hsv_to_rgb
 
-add_library('P8gGraphicsSVG')
+add_library('svg')
 
 def setup():
-    global start_ms
     start_ms = millis()
     
     w = 1200
     h = 900
     
-    size(w, h)
+    size(1200, 900)
     
     seeds = [int(x) for x in open('seeds.txt')]
     
@@ -21,9 +20,9 @@ def setup():
     s = 660
     pw = (w - s) / 2
     ph = (h - s) / 2
-    for index, seed in enumerate(seeds[:5]):
+    for index, seed in enumerate(seeds):
         background(255)
-        beginRecord(P8gGraphicsSVG.SVG, 'svg_album/%s.svg' % index)
+        beginRecord(SVG, 'svg_album/%s.svg' % index)
         pushMatrix()
         translate(pw, ph)
         avatar(seed, s)
@@ -32,19 +31,16 @@ def setup():
         save('png_album/%s.png' % index)
         clear()
         println(str(floor(float(index) / float(len(seeds)) * 100)) + '%')
-    exit()
-
-def stop():
-    global start_ms
     end_ms = millis()
     format_duration(end_ms - start_ms)
+    exit()
 
 def format_duration(dur):
     ms = dur % 1000
     s = floor(dur / 1000 % 60)
     m = floor(dur / (1000 * 60) % 60)
     h = floor(dur / (1000 * 60 * 60))
-    println('%sh %sm %ss %s' % (h, m, s, ms))
+    println('FINISHED: %sh %sm %ss %sms' % (h, m, s, ms))
 
 def avatar(seed, avatarSize = 50):
     paddingSize = floor(avatarSize * 0.05)
